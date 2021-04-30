@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+// этот текст для теста пуша из домашего компа
 namespace MonoArk
 {
 
@@ -9,9 +9,8 @@ namespace MonoArk
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D mainMenuBackground;
-        Texture2D avia;
-        Texture2D level1Back;
+        Texture2D gameBackground;
+        Texture2D menuBackground;
         int BackBufferWidth = 1920;
         int BackBufferHeight = 1080;
 
@@ -19,6 +18,7 @@ namespace MonoArk
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
         }
 
         protected override void Initialize()
@@ -34,9 +34,8 @@ namespace MonoArk
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            mainMenuBackground = Content.Load <Texture2D>("SHRAM_GAMES-20");
-            avia = Content.Load<Texture2D>("avia");
-            level1Back = Content.Load<Texture2D>("level1Back");
+            menuBackground = Content.Load<Texture2D>("menuBackground");
+            //gameBackground = Content.Load<Texture2D>("gameBackground");
 
         }
 
@@ -48,7 +47,7 @@ namespace MonoArk
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.E))
+            if (Keyboard.GetState().IsKeyDown(Keys.E))
                 Exit();
 
 
@@ -63,14 +62,7 @@ namespace MonoArk
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(mainMenuBackground, new Rectangle(0, 0, BackBufferWidth, BackBufferHeight), Color.White);
-
-            spriteBatch.Draw(avia, new Vector2((Window.ClientBounds.Width / 2),
-                                             (Window.ClientBounds.Height / 2)),
-                null, Color.White, 0, Vector2.Zero, 0.2f, SpriteEffects.None, 0);
-
-            spriteBatch.Draw(avia, new Rectangle((Window.ClientBounds.Width / 8), (Window.ClientBounds.Height / 8),
-                            BackBufferWidth / 2, BackBufferHeight / 2), Color.White);
+            spriteBatch.Draw(menuBackground, new Rectangle(0, 0, BackBufferWidth, BackBufferHeight), Color.White);
 
 
             spriteBatch.End();
