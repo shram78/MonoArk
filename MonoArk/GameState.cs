@@ -8,7 +8,9 @@ namespace MonoArk
 {
     enum GameState
     {
-        GemeMode,
-        GameMenu
+        Menu,
+        Gameplay,
+        EndGame,
     }
+
 }
