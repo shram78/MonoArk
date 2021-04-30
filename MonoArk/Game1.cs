@@ -65,9 +65,9 @@ namespace MonoArk
 
             spriteBatch.Draw(mainMenuBackground, new Rectangle(0, 0, BackBufferWidth, BackBufferHeight), Color.White);
 
-            //spriteBatch.Draw(avia, new Vector2((Window.ClientBounds.Width / 2),
-            //                                 (Window.ClientBounds.Height / 2)),
-            //    null, Color.White, 0, Vector2.Zero, 0.2f, SpriteEffects.None, 0);
+            spriteBatch.Draw(avia, new Vector2((Window.ClientBounds.Width / 2),
+                                             (Window.ClientBounds.Height / 2)),
+                null, Color.White, 0, Vector2.Zero, 0.2f, SpriteEffects.None, 0);
 
             spriteBatch.Draw(avia, new Rectangle((Window.ClientBounds.Width / 8), (Window.ClientBounds.Height / 8),
                             BackBufferWidth / 2, BackBufferHeight / 2), Color.White);
