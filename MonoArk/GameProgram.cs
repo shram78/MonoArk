@@ -9,14 +9,18 @@ namespace MonoArk
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Button exitButton;
 
-        MouseState mouse;
+
+
+
+        MouseState mouse; //сдалть счетчик ФПС средствами VS
 
         //Texture2D gameBackground;
         Texture2D menuBackground;
-        Texture2D exitNoPress;  
+        //Texture2D exitNoPress;
 
-        Rectangle exitButton = new Rectangle(100, 800, 200, 100);// такие же координаты, как у кнопки выход
+       // Rectangle exitButton = new Rectangle(100, 800, 200, 100);// такие же координаты, как у кнопки выход
 
         int BackBufferWidth = 1920;
         int BackBufferHeight = 1080;
@@ -42,7 +46,9 @@ namespace MonoArk
             spriteBatch = new SpriteBatch(GraphicsDevice);
             menuBackground = Content.Load<Texture2D>("menuBackground");
             //gameBackground = Content.Load<Texture2D>("gameBackground");
-            exitNoPress = Content.Load<Texture2D>("ExitNoPress");
+            //exitNoPress = Content.Load<Texture2D>("ExitNoPress");
+
+            exitButton = new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress"));
         }
 
         protected override void UnloadContent()
@@ -56,6 +62,11 @@ namespace MonoArk
                 Exit();
             mouse = Mouse.GetState();
 
+            if (mouse.LeftButton == ButtonState.Pressed && exitButton.ContainsButton(mouse.X, mouse.Y))
+            {
+                Exit();
+            }
+       
             base.Update(gameTime);
         }
 
@@ -65,17 +76,10 @@ namespace MonoArk
             spriteBatch.Begin();
 
             spriteBatch.Draw(menuBackground, new Rectangle(0, 0, BackBufferWidth, BackBufferHeight), Color.White);
-            spriteBatch.Draw(exitNoPress, new Rectangle(100, 800, 200, 100), Color.White); // переписать с масшатабом разрешения
 
-            if (exitButton.Contains(mouse.X, mouse.Y))
-            {
-                spriteBatch.Draw(exitNoPress, new Rectangle(100, 800, 200, 100), Color.Red);
-            }
+            exitButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
 
-            if (mouse.LeftButton == ButtonState.Pressed && exitButton.Contains(mouse.X, mouse.Y))
-            {
-                Exit();
-            }
+          
 
             spriteBatch.End();
             base.Draw(gameTime);
