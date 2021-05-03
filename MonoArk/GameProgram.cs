@@ -72,10 +72,7 @@ namespace MonoArk
             {
                 case ProgramStates.MAIN_MENU:
                 {
-                        if (mouse.LeftButton == ButtonState.Pressed && exitButton.ContainsButton(mouse.X, mouse.Y))
-                        {
-                            Exit();
-                        }
+                        if (mouse.LeftButton == ButtonState.Pressed && exitButton.ContainsButton(mouse.X, mouse.Y)) Exit();
                         break;
                 }
                 case ProgramStates.GAME_MENU:
