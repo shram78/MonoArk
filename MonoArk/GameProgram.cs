@@ -5,12 +5,20 @@ using Microsoft.Xna.Framework.Input;
 namespace MonoArk
 {
 
+    enum ProgramStates
+    {
+        MAIN_MENU,
+        GAME_MENU,
+        GAME_PLAY,
+        EXIT
+    }
+
     public class GameProgram : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Button exitButton;
-
+        ProgramStates programState;
 
 
 
@@ -30,6 +38,7 @@ namespace MonoArk
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            programState = ProgramStates.MAIN_MENU;
         }
 
         protected override void Initialize()
@@ -58,15 +67,35 @@ namespace MonoArk
 
         protected override void Update(GameTime gameTime)
         {
+            mouse = Mouse.GetState();
+            switch (programState)
+            {
+                case ProgramStates.MAIN_MENU:
+                {
+                        if (mouse.LeftButton == ButtonState.Pressed && exitButton.ContainsButton(mouse.X, mouse.Y))
+                        {
+                            Exit();
+                        }
+                        break;
+                }
+                case ProgramStates.GAME_MENU:
+                {
+                        break;
+                }
+                case ProgramStates.GAME_PLAY:
+                {
+                        break;
+                }
+                case ProgramStates.EXIT:
+                {
+                        break;
+                }
+            }
+
+            //Зачем это нужно????
             if (Keyboard.GetState().IsKeyDown(Keys.E))
                 Exit();
-            mouse = Mouse.GetState();
-
-            if (mouse.LeftButton == ButtonState.Pressed && exitButton.ContainsButton(mouse.X, mouse.Y))
-            {
-                Exit();
-            }
-       
+            //????????
             base.Update(gameTime);
         }
 
