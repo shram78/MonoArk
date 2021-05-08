@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MonoArk
 {
-
     enum ProgramStates
     {
         MAIN_MENU,
@@ -17,34 +16,26 @@ namespace MonoArk
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Button exitButton;
-        ProgramStates programState;
-
-
-
+        Button exitButton, startButton;
+        Texture2D menuBackground, gameBackground;
+        SpriteFont fontInGame;
+        int widthClip = 1920;
+        int heightClip = 1080;
         MouseState mouse; //сдалть счетчик ФПС средствами VS
 
-        //Texture2D gameBackground;
-        Texture2D menuBackground;
-        //Texture2D exitNoPress;
-
-       // Rectangle exitButton = new Rectangle(100, 800, 200, 100);// такие же координаты, как у кнопки выход
-
-        int BackBufferWidth = 1920;
-        int BackBufferHeight = 1080;
-
+        ProgramStates programState;
         public GameProgram()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+
             programState = ProgramStates.MAIN_MENU;
         }
 
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = BackBufferWidth;
-            graphics.PreferredBackBufferHeight = BackBufferHeight;
+            graphics.PreferredBackBufferWidth = widthClip;
+            graphics.PreferredBackBufferHeight = heightClip;
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             base.Initialize();
@@ -54,16 +45,13 @@ namespace MonoArk
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             menuBackground = Content.Load<Texture2D>("menuBackground");
-            //gameBackground = Content.Load<Texture2D>("gameBackground");
-            //exitNoPress = Content.Load<Texture2D>("ExitNoPress");
-
+            gameBackground = Content.Load<Texture2D>("gameBackground");
+            fontInGame = Content.Load<SpriteFont>("fontInGame");
             exitButton = new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress"));
+            startButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("StartNoPress"));
         }
 
-        protected override void UnloadContent()
-        {
-
-        }
+        protected override void UnloadContent() { }
 
         protected override void Update(GameTime gameTime)
         {
@@ -71,42 +59,68 @@ namespace MonoArk
             switch (programState)
             {
                 case ProgramStates.MAIN_MENU:
-                {
-                        if (mouse.LeftButton == ButtonState.Pressed && exitButton.ContainsButton(mouse.X, mouse.Y)) Exit();
+                    {
+                        IsMouseVisible = true;
+                        if (mouse.LeftButton == ButtonState.Pressed && exitButton.ContainsButton(mouse.X, mouse.Y))
+                        {
+                            Exit();
+                        }
+                        if (mouse.LeftButton == ButtonState.Pressed && startButton.ContainsButton(mouse.X, mouse.Y))
+                        {
+                            programState = ProgramStates.GAME_PLAY;
+                        }
                         break;
-                }
+                    }
                 case ProgramStates.GAME_MENU:
-                {
+                    {
+                        IsMouseVisible = true;
                         break;
-                }
+                    }
                 case ProgramStates.GAME_PLAY:
-                {
+                    {
+                        IsMouseVisible = false;
+                        if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                        {
+                            programState = ProgramStates.MAIN_MENU;
+                        }
                         break;
-                }
+                    }
                 case ProgramStates.EXIT:
-                {
+                    {
                         break;
-                }
+                    }
             }
-
-            //Зачем это нужно????
-            if (Keyboard.GetState().IsKeyDown(Keys.E))
-                Exit();
-            //????????
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
-            spriteBatch.Draw(menuBackground, new Rectangle(0, 0, BackBufferWidth, BackBufferHeight), Color.White);
-
-            exitButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
-
-          
-
+            switch (programState)
+            {
+                case ProgramStates.MAIN_MENU:
+                    {
+                        spriteBatch.Draw(menuBackground, new Rectangle(0, 0, widthClip, heightClip), Color.White);
+                        exitButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
+                        startButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
+                        break;
+                    }
+                case ProgramStates.GAME_MENU:
+                    {
+                        break;
+                    }
+                case ProgramStates.GAME_PLAY:
+                    {
+                        spriteBatch.Draw(gameBackground, new Rectangle(0, 0, widthClip, heightClip), Color.White);
+                        spriteBatch.DrawString(fontInGame, "Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
+                        break;
+                    }
+                case ProgramStates.EXIT:
+                    {
+                        break;
+                    }
+            }
             spriteBatch.End();
             base.Draw(gameTime);
         }

@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="Button.cs" />
     <Compile Include="GameProgram.cs" />
-    <Compile Include="GameState.cs" />
     <Compile Include="MenuOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
