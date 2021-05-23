@@ -22,7 +22,9 @@ namespace MonoArk
         SpriteFont fontInGame;
         int widthClip = 1920;
         int heightClip = 1080;
-        MouseState mouse; 
+        MouseState mouse;
+
+        private Vector2 _positionRacket;
 
         ProgramStates programState;
         public GameProgram()
@@ -48,9 +50,10 @@ namespace MonoArk
             menuBackground = Content.Load<Texture2D>("menuBackground");
             gameBackground = Content.Load<Texture2D>("gameBackground");
             fontInGame = Content.Load<SpriteFont>("fontInGame");
+            _positionRacket = new Vector2(860, 1000);
             exitButton = new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress"));
             startButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("StartNoPress"));
-            racket = new Racket(860, 1000, 200, 50, Content.Load<Texture2D>("Racket"));
+            racket = new Racket(Content.Load<Texture2D>("Racket"));
         }
 
         protected override void UnloadContent() { }
@@ -72,7 +75,7 @@ namespace MonoArk
                             programState = ProgramStates.GAME_PLAY;
                         }
 
-                        
+
 
                         break;
                     }
@@ -88,6 +91,20 @@ namespace MonoArk
                         {
                             programState = ProgramStates.MAIN_MENU;
                         }
+
+                        if (Keyboard.GetState().IsKeyDown(Keys.A))
+                        {
+                            _positionRacket.X -= 10;
+                            if (_positionRacket.X < 0) _positionRacket.X = 0;
+
+                        }
+
+                        if (Keyboard.GetState().IsKeyDown(Keys.D))
+                        {
+                            _positionRacket.X += 10;
+                            if (_positionRacket.X > 1820) _positionRacket.X = 1820;
+                        }
+
                         break;
                     }
                 case ProgramStates.EXIT:
@@ -119,8 +136,10 @@ namespace MonoArk
                     {
                         spriteBatch.Draw(gameBackground, new Rectangle(0, 0, widthClip, heightClip), Color.White);
                         spriteBatch.DrawString(fontInGame, "Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
-                        racket.DrawRacket(spriteBatch);
-                        
+
+                        racket.DrawRacket(spriteBatch, _positionRacket);   /////////
+
+
                         break;
                     }
                 case ProgramStates.EXIT:
