@@ -17,18 +17,18 @@ namespace MonoArk
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Button exitButton, startButton;
+        Racket racket;
         Texture2D menuBackground, gameBackground;
         SpriteFont fontInGame;
         int widthClip = 1920;
         int heightClip = 1080;
-        MouseState mouse; //сдалть счетчик ФПС средствами VS
+        MouseState mouse; 
 
         ProgramStates programState;
         public GameProgram()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
             programState = ProgramStates.MAIN_MENU;
         }
 
@@ -44,11 +44,13 @@ namespace MonoArk
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             menuBackground = Content.Load<Texture2D>("menuBackground");
             gameBackground = Content.Load<Texture2D>("gameBackground");
             fontInGame = Content.Load<SpriteFont>("fontInGame");
             exitButton = new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress"));
             startButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("StartNoPress"));
+            racket = new Racket(860, 1000, 200, 50, Content.Load<Texture2D>("Racket"));
         }
 
         protected override void UnloadContent() { }
@@ -69,6 +71,9 @@ namespace MonoArk
                         {
                             programState = ProgramStates.GAME_PLAY;
                         }
+
+                        
+
                         break;
                     }
                 case ProgramStates.GAME_MENU:
@@ -114,6 +119,8 @@ namespace MonoArk
                     {
                         spriteBatch.Draw(gameBackground, new Rectangle(0, 0, widthClip, heightClip), Color.White);
                         spriteBatch.DrawString(fontInGame, "Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
+                        racket.DrawRacket(spriteBatch);
+                        
                         break;
                     }
                 case ProgramStates.EXIT:
