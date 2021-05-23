@@ -17,5 +17,14 @@ namespace MonoArk
         {
             spriteBatch.Draw(texture2D, _position, Color.White);
         }
+
+        public float MoveRocket(float _position, int direction)
+        {
+            _position += direction;
+            if (_position < 0) _position = 0;
+            if (_position > 1820) _position = 1820;
+
+            return _position;
+        }
     }
 }

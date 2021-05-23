@@ -94,15 +94,12 @@ namespace MonoArk
 
                         if (Keyboard.GetState().IsKeyDown(Keys.A))
                         {
-                            _positionRacket.X -= 10;
-                            if (_positionRacket.X < 0) _positionRacket.X = 0;
-
+                            _positionRacket.X = racket.MoveRocket(_positionRacket.X, -10);
                         }
 
                         if (Keyboard.GetState().IsKeyDown(Keys.D))
                         {
-                            _positionRacket.X += 10;
-                            if (_positionRacket.X > 1820) _positionRacket.X = 1820;
+                            _positionRacket.X = racket.MoveRocket(_positionRacket.X, 10);
                         }
 
                         break;
