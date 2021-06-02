@@ -23,9 +23,6 @@ namespace MonoArk
         int widthClip = 1920;
         int heightClip = 1080;
         MouseState mouse;
-
-        private Vector2 _positionRacket;
-
         ProgramStates programState;
         public GameProgram()
         {
@@ -50,13 +47,17 @@ namespace MonoArk
             menuBackground = Content.Load<Texture2D>("menuBackground");
             gameBackground = Content.Load<Texture2D>("gameBackground");
             fontInGame = Content.Load<SpriteFont>("fontInGame");
-            _positionRacket = new Vector2(860, 1000);
             exitButton = new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress"));
             startButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("StartNoPress"));
-            racket = new Racket(Content.Load<Texture2D>("Racket"));
+            racket = new Racket(Content.Load<Texture2D>("Racket"),
+                                     new Vector2(860, 1000), new Vector2(0, 0));
         }
 
-        protected override void UnloadContent() { }
+        protected override void UnloadContent()
+        {
+            racket.Texture.Dispose();
+            spriteBatch.Dispose();
+        }
 
         protected override void Update(GameTime gameTime)
         {
@@ -74,9 +75,6 @@ namespace MonoArk
                         {
                             programState = ProgramStates.GAME_PLAY;
                         }
-
-
-
                         break;
                     }
                 case ProgramStates.GAME_MENU:
@@ -94,12 +92,17 @@ namespace MonoArk
 
                         if (Keyboard.GetState().IsKeyDown(Keys.A))
                         {
-                            _positionRacket.X = racket.MoveRocket(_positionRacket.X, -10);
+                            racket.Position.X = racket.Move(racket.Position.X, -10);
                         }
 
                         if (Keyboard.GetState().IsKeyDown(Keys.D))
                         {
-                            _positionRacket.X = racket.MoveRocket(_positionRacket.X, 10);
+                            racket.Position.X = racket.Move(racket.Position.X, 10);
+                        }
+
+                        if (Keyboard.GetState().IsKeyDown(Keys.W))
+                        {
+                            racket.Position.Y = racket.Move(racket.Position.Y, -10);
                         }
 
                         break;
@@ -133,10 +136,7 @@ namespace MonoArk
                     {
                         spriteBatch.Draw(gameBackground, new Rectangle(0, 0, widthClip, heightClip), Color.White);
                         spriteBatch.DrawString(fontInGame, "Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
-
-                        racket.DrawRacket(spriteBatch, _positionRacket);   /////////
-
-
+                        spriteBatch.Draw(racket.Texture, racket.Position, Color.White);
                         break;
                     }
                 case ProgramStates.EXIT:
