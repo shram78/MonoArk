@@ -30,7 +30,7 @@ namespace MonoArk
         
         public int speed;
         
-        void move()
+        void move();
                 
     }
     
