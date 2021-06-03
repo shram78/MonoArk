@@ -17,4 +17,39 @@ namespace MonoArk
             Size = size;
         }
     }
+    
+    interface GameObject {
+        
+        public Texture2D texture;
+        public Vector2 position;
+        public Vector2 size;
+                
+    }
+    
+    interface MoveableGameObject {
+        
+        public int speed;
+        
+        void move()
+                
+    }
+    
+    class RocketObject : GameObject, MoveableGameObject {
+        
+        RocketObject(Texture2D ro_texture, ro_position, ro_size, ro_speed) {
+            texture = ro_texture;
+            position = ro_position;
+            size = ro_size;
+            speed = ro_speed;       
+        }
+        
+        void move() {
+            position.X = position.X + speed;
+        }
+        
+        void changeDirection() {
+            speed = -speed;
+        }
+        
+    }
 }
