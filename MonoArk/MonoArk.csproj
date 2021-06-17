@@ -42,7 +42,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Button.cs" />
-    <Compile Include="GameEssence .cs" />
     <Compile Include="GameProgram.cs" />
     <Compile Include="IMovable.cs" />
     <Compile Include="MenuOptions.cs" />
