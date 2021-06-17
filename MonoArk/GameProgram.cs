@@ -41,6 +41,11 @@ namespace MonoArk
         MouseState mouse;
         ProgramStates programState;
 
+        //счетчик FPS
+        int total_frames = 0;
+        double elapsed_time = 0;
+        int fps = 0;
+
         public GameProgram()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -112,6 +117,15 @@ namespace MonoArk
                     }
                 case ProgramStates.GAME_PLAY:
                     {
+                        //for fps
+                        elapsed_time = elapsed_time + gameTime.ElapsedGameTime.TotalMilliseconds;
+                        if (elapsed_time >= 1000)
+                        {
+                            fps = total_frames;
+                            total_frames = 0;
+                            elapsed_time = 0;
+                        }
+
                         IsMouseVisible = false;
                         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                         {
@@ -167,8 +181,11 @@ namespace MonoArk
                     }
                 case ProgramStates.GAME_PLAY:
                     {
+                        // for fps
+                        total_frames++;
+
                         spriteBatch.Draw(gameBackground, viewPortRectangle, Color.White);
-                        spriteBatch.DrawString(fontInGame, "Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
+                        spriteBatch.DrawString(fontInGame, $"FPS = {fps}.   Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
                         racket.draw(spriteBatch);
                         ball.draw(spriteBatch);
 
