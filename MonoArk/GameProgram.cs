@@ -34,8 +34,9 @@ namespace MonoArk
 
         private Brick[,] bricks;
 
-        private int brickInLenght = 10;
-        private int brickInHeight = 5;
+        private static int brickInLenght = 10;
+        private static int brickInHeight = 5;
+        private int brickCount = brickInLenght * brickInHeight;
 
         MouseState mouse;
         ProgramStates programState;
@@ -123,6 +124,8 @@ namespace MonoArk
                             {
                                 ball.changeDirection_Y();
                                 brick.kill();
+                                brickCount--;
+                                if (brickCount == 0) Exit();
                             }
                         }
 
