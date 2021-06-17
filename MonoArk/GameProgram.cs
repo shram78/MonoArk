@@ -2,11 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using GameClasses;
-using System;
+
 
 namespace MonoArk
 {
-
     enum ProgramStates
     {
         MAIN_MENU,
@@ -17,12 +16,6 @@ namespace MonoArk
 
     public class GameProgram : Game
     {
-
-        private int frames = 0;
-        private long time = 0;
-
-        private int fps = 0;
-
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
@@ -85,7 +78,7 @@ namespace MonoArk
                     bricks[i, j] = new Brick(Content.Load<Texture2D>("Brick"), new Vector2(i * 150 + 220, j * 50 + 200), 0);
                 }
             }
-            ball = new Ball(Content.Load<Texture2D>("Ball"), new Vector2(viewPortRectangle.Width / 2 - 15, viewPortRectangle.Height - 80), new Vector2 (3,3));
+            ball = new Ball(Content.Load<Texture2D>("Ball"), new Vector2(viewPortRectangle.Width / 2 - 15, viewPortRectangle.Height - 80), new Vector2(7, 7));
         }
 
         protected override void UnloadContent()
@@ -138,7 +131,7 @@ namespace MonoArk
                         ball.move();
                         ball.check_wall_collision(viewPortRectangle);
                         ball.check_racket_collision(racket);
-                        if (ball.GetLive() == false )
+                        if (ball.GetLive() == false)
                         {
                             Exit();
                         }
@@ -154,8 +147,6 @@ namespace MonoArk
 
         protected override void Draw(GameTime gameTime)
         {
-            long start_time = DateTime.Now.Ticks;
-
             spriteBatch.Begin();
 
             switch (programState)
@@ -180,8 +171,8 @@ namespace MonoArk
 
                         foreach (var brick in bricks)
                         {
-                            if (brick.is_alive()) 
-                            brick.draw(spriteBatch);
+                            if (brick.is_alive())
+                                brick.draw(spriteBatch);
                         }
                         break;
                     }
@@ -190,12 +181,8 @@ namespace MonoArk
                         break;
                     }
             }
-            time = start_time + DateTime.Now.Ticks;
-            fps = (int)((time / TimeSpan.TicksPerSecond));
-            spriteBatch.DrawString(fontInGame, $"FPS: {fps}", new Vector2(500, 500), Color.Red);
             spriteBatch.End();
             base.Draw(gameTime);
-            
         }
     }
 }

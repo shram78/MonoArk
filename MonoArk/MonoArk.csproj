@@ -42,12 +42,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Button.cs" />
+    <Compile Include="GameClasses.cs" />
     <Compile Include="GameProgram.cs" />
-    <Compile Include="IMovable.cs" />
     <Compile Include="MenuOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Racket.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
