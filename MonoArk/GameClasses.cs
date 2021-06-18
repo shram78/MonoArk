@@ -95,8 +95,8 @@ namespace GameClasses
             {
                 live = false;
             }
-
         }
+
         public void check_racket_collision(GameObject gameObject)
         {
             if ((position.Y + texture.Height) > gameObject.get_position().Y &&
@@ -106,6 +106,7 @@ namespace GameClasses
                 changeDirection_Y();
             }
         }
+
         public bool check_bricks_collision(GameObject gameObject)
         {
             if (position.Y < (gameObject.get_position().Y + gameObject.get_texture().Height) &&

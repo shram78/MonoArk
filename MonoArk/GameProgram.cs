@@ -34,11 +34,17 @@ namespace MonoArk
 
         private Brick[,] bricks;
 
-        private int brickInLenght = 10;
-        private int brickInHeight = 5;
+        private static int brickInLenght = 10;
+        private static int brickInHeight = 5;
+        private int brickCount = brickInLenght * brickInHeight;
 
         MouseState mouse;
         ProgramStates programState;
+
+        //счетчик FPS
+        int total_frames = 0;
+        double elapsed_time = 0;
+        int fps = 0;
 
         public GameProgram()
         {
@@ -123,6 +129,8 @@ namespace MonoArk
                             {
                                 ball.changeDirection_Y();
                                 brick.kill();
+                                brickCount--;
+                                if (brickCount == 0) Exit();
                             }
                         }
 
@@ -147,6 +155,16 @@ namespace MonoArk
 
         protected override void Draw(GameTime gameTime)
         {
+            //for fps
+            total_frames++;
+            elapsed_time = elapsed_time + gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (elapsed_time >= 1000)
+            {
+                fps = total_frames;
+                total_frames = 0;
+                elapsed_time = 0;
+            }
+
             spriteBatch.Begin();
 
             switch (programState)
@@ -165,7 +183,7 @@ namespace MonoArk
                 case ProgramStates.GAME_PLAY:
                     {
                         spriteBatch.Draw(gameBackground, viewPortRectangle, Color.White);
-                        spriteBatch.DrawString(fontInGame, "Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
+                        spriteBatch.DrawString(fontInGame, $"FPS = {fps}.   Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
                         racket.draw(spriteBatch);
                         ball.draw(spriteBatch);
 
