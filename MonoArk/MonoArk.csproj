@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Button.cs" />
     <Compile Include="GameClasses.cs" />
+    <Compile Include="GameOption.cs" />
     <Compile Include="GameProgram.cs" />
     <Compile Include="MenuOptions.cs" />
     <Compile Include="Program.cs" />
