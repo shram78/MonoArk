@@ -52,13 +52,14 @@ namespace MonoArk
             Content.RootDirectory = "Content";
             //  programState = ProgramStates.MAIN_MENU;
             programState = ProgramStates.GAME_PLAY;
+           
         }
 
         protected override void Initialize()
         {
             graphics.PreferredBackBufferWidth = widthClip;
             graphics.PreferredBackBufferHeight = heightClip;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             graphics.ApplyChanges();
             base.Initialize();
         }
