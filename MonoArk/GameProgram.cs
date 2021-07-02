@@ -18,16 +18,19 @@ namespace MonoArk
     public class GameProgram : Game
     {
         private SpriteBatch spriteBatch;
+        public GraphicsDeviceManager graphicsManager; //убрать
+
+        GameOption GameOptions = new GameOption(1920, 1080);
 
         private Rectangle viewPortRectangle;
 
-        //private int widthClip = 1920;
-        //private int heightClip = 1080;
+        private int widthClip = 1920;// убрать
+        private int heightClip = 1080; // убрать
 
         private SpriteFont fontInGame;
-        private Texture2D menuBackground, gameBackground;
+        private Texture2D menuBackground, gameBackground, optionsBackground;
 
-        private Button exitButton, startButton, menuOption;
+        private Button exitButton, startButton, menuOptionButton, backButton, FHDButtun;
 
         private Racket racket;
         private Ball ball;
@@ -48,32 +51,36 @@ namespace MonoArk
 
         public GameProgram()
         {
+            //GameOption gameOption = new GameOption(1920, 1080);
+            //gameOption.ChangeResolution(1920, 1080);
             graphicsManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            //  programState = ProgramStates.MAIN_MENU;
-            programState = ProgramStates.GAME_PLAY;
+            programState = ProgramStates.MAIN_MENU;
         }
 
         protected override void Initialize()
         {
-            //graphics.PreferredBackBufferWidth = widthClip;
-            //graphics.PreferredBackBufferHeight = heightClip;
-            //graphics.IsFullScreen = true;
-            //graphics.ApplyChanges();
+            graphicsManager.PreferredBackBufferWidth = widthClip;
+            graphicsManager.PreferredBackBufferHeight = heightClip;
+            GameOptions.SetFullScreenOreWindows(graphicsManager);
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            viewPortRectangle = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+            viewPortRectangle = new Rectangle(0, 0, graphicsManager.GraphicsDevice.Viewport.Width, graphicsManager.GraphicsDevice.Viewport.Height);
             menuBackground = Content.Load<Texture2D>("menuBackground");
             gameBackground = Content.Load<Texture2D>("gameBackground");
+            optionsBackground = Content.Load<Texture2D>("optionsBackground");
             fontInGame = Content.Load<SpriteFont>("fontInGame");
 
             exitButton = new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress"));
-            startButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("StartNoPress"));
-            menuOption = new Button(100, 400, 200, 100, Content.Load<Texture2D>("StartNoPress"));
+            startButton = new Button(100, 400, 200, 100, Content.Load<Texture2D>("StartNoPress"));
+            menuOptionButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("menuOptionButton"));
+            backButton = new Button(850, 800, 200, 100, Content.Load<Texture2D>("backButton"));
+            FHDButtun = new Button(850, 400, 200, 100, Content.Load<Texture2D>("FHDButtun"));
+
 
             racket = new Racket(Content.Load<Texture2D>("Racket"), new Vector2(viewPortRectangle.Width / 2 - 50, viewPortRectangle.Height - 50), 10);
 
@@ -110,28 +117,41 @@ namespace MonoArk
                         {
                             programState = ProgramStates.GAME_PLAY;
                         }
-                        if (mouse.LeftButton == ButtonState.Pressed && menuOption.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && menuOptionButton.ContainsButton(mouse.X, mouse.Y))
                         {
                             programState = ProgramStates.OPTIONS;
                         }
                         break;
                     }
+
                 case ProgramStates.GAME_MENU:
                     {
                         IsMouseVisible = true;
                         break;
                     }
-                //case ProgramStates.OPTIONS:
-                //    {
-                // Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
-                //        break;
-                //    }
+                case ProgramStates.OPTIONS:
+                    {
+                        IsMouseVisible = true;
+
+                        if (mouse.LeftButton == ButtonState.Pressed && backButton.ContainsButton(mouse.X, mouse.Y))
+                        {
+                            programState = ProgramStates.MAIN_MENU;
+                        }
+
+                        if (mouse.LeftButton == ButtonState.Pressed && FHDButtun.ContainsButton(mouse.X, mouse.Y))
+                        {
+                            GameOptions.SetFullScreenOreWindows(graphicsManager);
+                        }
+
+                        //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
+                        break;
+                    }
                 case ProgramStates.GAME_PLAY:
                     {
                         IsMouseVisible = false;
                         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                         {
-                            // programState = ProgramStates.MAIN_MENU;
+                            //programState = ProgramStates.MAIN_MENU;
                             Exit();
                         }
                         foreach (var brick in bricks)
@@ -185,8 +205,19 @@ namespace MonoArk
                         spriteBatch.Draw(menuBackground, viewPortRectangle, Color.White);
                         exitButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
                         startButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
+                        menuOptionButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
                         break;
                     }
+
+                case ProgramStates.OPTIONS:
+                    {
+                        spriteBatch.Draw(optionsBackground, viewPortRectangle, Color.White);
+                        backButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
+                        FHDButtun.DrawButton(mouse.X, mouse.Y, spriteBatch);
+                        //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
+                        break;
+                    }
+
                 case ProgramStates.GAME_MENU:
                     {
                         break;

@@ -8,7 +8,7 @@ namespace MonoArk
     {
         private int widthClip;
         private int heightClip;
-        private GraphicsDeviceManager graphicsManager;
+       // public GraphicsDeviceManager graphicsManager;
         public GameOption(int WidthClip, int HeightClip)
         {
             widthClip = WidthClip;
@@ -21,12 +21,49 @@ namespace MonoArk
             widthClip = Width;
             heightClip = Height;
             //Отправил запрос на изменение разрешения движку
-            graphics.PreferredBackBufferWidth = widthClip;
-            graphics.PreferredBackBufferHeight = heightClip;
+        //    graphics.PreferredBackBufferWidth = widthClip;
+          //  graphics.PreferredBackBufferHeight = heightClip;
             //Применил изменение разрешения
-            graphics.ApplyChanges();
+           // graphics.ApplyChanges();
         }
 
+        //public bool SetFullScreenOreWindows(GraphicsDeviceManager graphicsManager)
+        //{
+        //    if (graphicsManager.IsFullScreen == false)
+        //    {
+        //        graphicsManager.ApplyChanges();
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        graphicsManager.ApplyChanges();
+        //        return false;
+        //    }
+        //}
+
+        public void SetFullScreenOreWindows(GraphicsDeviceManager graphicsManager)
+        {
+            if (graphicsManager.IsFullScreen == false)
+            {
+                graphicsManager.IsFullScreen = true;
+                graphicsManager.ApplyChanges();
+                //return true;
+            }
+            else
+            {
+                graphicsManager.IsFullScreen = false;
+                graphicsManager.ApplyChanges();
+                //return false;
+            }
+        }
+
+        public bool SetHd()
+        {
+
+            //graphicsManager.IsFullScreen = true;
+            //graphicsManager.ApplyChanges();
+            return false;
+        }
         //Rectangle getWindowSize
 
 
