@@ -6,31 +6,31 @@ namespace MonoArk
 {
     class Button
     {
-        private Rectangle rectangle;
-        private Texture2D texture2D;
+        private Rectangle _rectangle;
+        private Texture2D _texture2D;
 
         public Button(int x, int y, int width, int height, Texture2D texture)
         {
-            rectangle = new Rectangle(x, y, width, height);
+            _rectangle = new Rectangle(x, y, width, height);
 
-            texture2D = texture;
+            _texture2D = texture;
         }
 
         public void DrawButton(int mouseX, int mouseY, SpriteBatch spriteBatch)
         {
-            if (rectangle.Contains(mouseX, mouseY))
+            if (_rectangle.Contains(mouseX, mouseY))
             {
-                spriteBatch.Draw(texture2D, rectangle, Color.Blue);
+                spriteBatch.Draw(_texture2D, _rectangle, Color.Blue);
             }
             else
             {
-                spriteBatch.Draw(texture2D, rectangle, Color.White);
+                spriteBatch.Draw(_texture2D, _rectangle, Color.White);
             }
         }
 
         public bool ContainsButton(int mouseX, int mouseY)
         {
-            return rectangle.Contains(mouseX, mouseY);
+            return _rectangle.Contains(mouseX, mouseY);
         }
     }
 }

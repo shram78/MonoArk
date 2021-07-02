@@ -17,29 +17,24 @@ namespace MonoArk
 
     public class GameProgram : Game
     {
-        private SpriteBatch spriteBatch;
-        public GraphicsDeviceManager graphicsManager; //убрать
+        private SpriteBatch _spriteBatch;
+        private GraphicsDeviceManager _graphicsManager;
 
         GameOption GameOptions = new GameOption(1920, 1080);
+        private Rectangle _viewPortRectangle;
 
-        private Rectangle viewPortRectangle;
+        private SpriteFont _fontInGame;
+        private Texture2D _menuBackground, _gameBackground, _optionsBackground;
 
-        private int widthClip = 1920;// убрать
-        private int heightClip = 1080; // убрать
+        private Button _exitButton, _startButton, _menuOptionButton, _backButton, _fullScreenButtun, _windowsButtun;
 
-        private SpriteFont fontInGame;
-        private Texture2D menuBackground, gameBackground, optionsBackground;
+        private Racket _racket;
+        private Ball _ball;
+        private Brick[,] _bricks;
 
-        private Button exitButton, startButton, menuOptionButton, backButton, FullScreenButtun, WindowsButtun;
-
-        private Racket racket;
-        private Ball ball;
-
-        private Brick[,] bricks;
-
-        private static int brickInLenght = 10;
-        private static int brickInHeight = 5;
-        private int brickCount = brickInLenght * brickInHeight;
+        private static int _brickInLenght = 10;
+        private static int _brickInHeight = 5;
+        private int _brickCount = _brickInLenght * _brickInHeight;
 
         MouseState mouse;
         ProgramStates programState;
@@ -51,71 +46,75 @@ namespace MonoArk
 
         public GameProgram()
         {
-            graphicsManager = new GraphicsDeviceManager(this);
+            _graphicsManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             programState = ProgramStates.MAIN_MENU;
         }
 
         protected override void Initialize()
         {
-            graphicsManager.PreferredBackBufferWidth = widthClip;
-            graphicsManager.PreferredBackBufferHeight = heightClip;
-            GameOptions.SetFullScreenMode(graphicsManager);
+            GameOptions.SetResolution(_graphicsManager);
+            GameOptions.SetFullScreenMode(_graphicsManager);
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            viewPortRectangle = new Rectangle(0, 0, graphicsManager.GraphicsDevice.Viewport.Width, graphicsManager.GraphicsDevice.Viewport.Height);
-            menuBackground = Content.Load<Texture2D>("menuBackground");
-            gameBackground = Content.Load<Texture2D>("gameBackground");
-            optionsBackground = Content.Load<Texture2D>("optionsBackground");
-            fontInGame = Content.Load<SpriteFont>("fontInGame");
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            // viewPortRectangle = new Rectangle(0, 0, graphicsManager.GraphicsDevice.Viewport.Width, graphicsManager.GraphicsDevice.Viewport.Height);
+            _viewPortRectangle = new Rectangle(0, 0, 1920, 1080);
+            _menuBackground = Content.Load<Texture2D>("menuBackground");
+            _gameBackground = Content.Load<Texture2D>("gameBackground");
+            _optionsBackground = Content.Load<Texture2D>("optionsBackground");
+            _fontInGame = Content.Load<SpriteFont>("fontInGame");
 
-            exitButton = new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress"));
-            startButton = new Button(100, 400, 200, 100, Content.Load<Texture2D>("StartNoPress"));
-            menuOptionButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("menuOptionButton"));
-            backButton = new Button(850, 800, 200, 100, Content.Load<Texture2D>("backButton"));
-            FullScreenButtun = new Button(750, 400, 200, 100, Content.Load<Texture2D>("FullScreenButtun"));
-            WindowsButtun = new Button(950, 400, 200, 100, Content.Load<Texture2D>("WindowsButtun"));
+            _exitButton = new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress"));
+            _startButton = new Button(100, 400, 200, 100, Content.Load<Texture2D>("StartNoPress"));
+            _menuOptionButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("menuOptionButton"));
+            _backButton = new Button(850, 800, 200, 100, Content.Load<Texture2D>("backButton"));
+            _fullScreenButtun = new Button(750, 400, 200, 100, Content.Load<Texture2D>("FullScreenButtun"));
+            _windowsButtun = new Button(950, 400, 200, 100, Content.Load<Texture2D>("WindowsButtun"));
 
-            racket = new Racket(Content.Load<Texture2D>("Racket"), new Vector2(viewPortRectangle.Width / 2 - 50, viewPortRectangle.Height - 50), 10);
+            _racket = new Racket(Content.Load<Texture2D>("Racket"), new Vector2(_viewPortRectangle.Width / 2 - 50, _viewPortRectangle.Height - 50), 10);
 
-            bricks = new Brick[brickInLenght, brickInHeight];
+            _bricks = new Brick[_brickInLenght, _brickInHeight];
 
-            for (int i = 0; i < brickInLenght; i++)
+            for (int i = 0; i < _brickInLenght; i++)
             {
-                for (int j = 0; j < brickInHeight; j++)
+
+                for (int j = 0; j < _brickInHeight; j++)
                 {
-                    bricks[i, j] = new Brick(Content.Load<Texture2D>("Brick"), new Vector2(i * 150 + 220, j * 50 + 200), 0);
+                    _bricks[i, j] = new Brick(Content.Load<Texture2D>("Brick"), new Vector2(i * 150 + 220, j * 50 + 200), 0);
                 }
             }
-            ball = new Ball(Content.Load<Texture2D>("Ball"), new Vector2(viewPortRectangle.Width / 2 - 15, viewPortRectangle.Height - 80), new Vector2(7, 7));
+            _ball = new Ball(Content.Load<Texture2D>("Ball"), new Vector2(_viewPortRectangle.Width / 2 - 15, _viewPortRectangle.Height - 80), new Vector2(7, 7));
         }
 
         protected override void UnloadContent()
         {
-            spriteBatch.Dispose();
+            _spriteBatch.Dispose();
         }
 
         protected override void Update(GameTime gameTime)
         {
             mouse = Mouse.GetState();
+
             switch (programState)
             {
                 case ProgramStates.MAIN_MENU:
                     {
                         IsMouseVisible = true;
-                        if (mouse.LeftButton == ButtonState.Pressed && exitButton.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && _exitButton.ContainsButton(mouse.X, mouse.Y))
                         {
                             Exit();
                         }
-                        if (mouse.LeftButton == ButtonState.Pressed && startButton.ContainsButton(mouse.X, mouse.Y))
+
+                        if (mouse.LeftButton == ButtonState.Pressed && _startButton.ContainsButton(mouse.X, mouse.Y))
                         {
                             programState = ProgramStates.GAME_PLAY;
                         }
-                        if (mouse.LeftButton == ButtonState.Pressed && menuOptionButton.ContainsButton(mouse.X, mouse.Y))
+
+                        if (mouse.LeftButton == ButtonState.Pressed && _menuOptionButton.ContainsButton(mouse.X, mouse.Y))
                         {
                             programState = ProgramStates.OPTIONS;
                         }
@@ -127,57 +126,63 @@ namespace MonoArk
                         IsMouseVisible = true;
                         break;
                     }
+
                 case ProgramStates.OPTIONS:
                     {
                         IsMouseVisible = true;
 
-                        if (mouse.LeftButton == ButtonState.Pressed && backButton.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && _backButton.ContainsButton(mouse.X, mouse.Y))
                         {
                             programState = ProgramStates.MAIN_MENU;
                         }
 
-                        if (mouse.LeftButton == ButtonState.Pressed && FullScreenButtun.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && _fullScreenButtun.ContainsButton(mouse.X, mouse.Y))
                         {
-                            GameOptions.SetFullScreenMode(graphicsManager);
+                            GameOptions.SetFullScreenMode(_graphicsManager);
                         }
 
-                        if (mouse.LeftButton == ButtonState.Pressed && WindowsButtun.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && _windowsButtun.ContainsButton(mouse.X, mouse.Y))
                         {
-                            GameOptions.SetWindowsMode(graphicsManager);
+                            GameOptions.SetWindowsMode(_graphicsManager);
                         }
                         //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
                         break;
                     }
+
                 case ProgramStates.GAME_PLAY:
                     {
                         IsMouseVisible = false;
+
                         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                         {
                             programState = ProgramStates.MAIN_MENU;
-                           // Exit();
+                            // Exit();
                         }
-                        foreach (var brick in bricks)
+
+                        foreach (var brick in _bricks)
                         {
-                            if (brick.is_alive() && ball.check_bricks_collision(brick))
+
+                            if (brick.is_alive() && _ball.check_bricks_collision(brick))
                             {
-                                ball.changeDirection_Y();
+                                _ball.changeDirection_Y();
                                 brick.kill();
-                                brickCount--;
-                                if (brickCount == 0) Exit();
+                                _brickCount--;
+                                if (_brickCount == 0) Exit();
                             }
                         }
 
-                        racket.move(Keyboard.GetState(), viewPortRectangle);
+                        _racket.move(Keyboard.GetState(), _viewPortRectangle);
+                        _ball.move();
+                        _ball.check_wall_collision(_viewPortRectangle);
+                        _ball.check_racket_collision(_racket);
 
-                        ball.move();
-                        ball.check_wall_collision(viewPortRectangle);
-                        ball.check_racket_collision(racket);
-                        if (ball.GetLive() == false)
+                        if (_ball.GetLive() == false)
                         {
                             Exit();
                         }
                         break;
                     }
+
                 case ProgramStates.EXIT:
                     {
                         break;
@@ -191,6 +196,7 @@ namespace MonoArk
             //for fps
             total_frames++;
             elapsed_time = elapsed_time + gameTime.ElapsedGameTime.TotalMilliseconds;
+
             if (elapsed_time >= 1000)
             {
                 fps = total_frames;
@@ -198,25 +204,27 @@ namespace MonoArk
                 elapsed_time = 0;
             }
 
-            spriteBatch.Begin();
+            _spriteBatch.Begin();
+
 
             switch (programState)
             {
+
                 case ProgramStates.MAIN_MENU:
                     {
-                        spriteBatch.Draw(menuBackground, viewPortRectangle, Color.White);
-                        exitButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
-                        startButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
-                        menuOptionButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
+                        _spriteBatch.Draw(_menuBackground, _viewPortRectangle, Color.White);
+                        _exitButton.DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _startButton.DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _menuOptionButton.DrawButton(mouse.X, mouse.Y, _spriteBatch);
                         break;
                     }
 
                 case ProgramStates.OPTIONS:
                     {
-                        spriteBatch.Draw(optionsBackground, viewPortRectangle, Color.White);
-                        backButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
-                        FullScreenButtun.DrawButton(mouse.X, mouse.Y, spriteBatch);
-                        WindowsButtun.DrawButton(mouse.X, mouse.Y, spriteBatch);
+                        _spriteBatch.Draw(_optionsBackground, _viewPortRectangle, Color.White);
+                        _backButton.DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _fullScreenButtun.DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _windowsButtun.DrawButton(mouse.X, mouse.Y, _spriteBatch);
                         //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
                         break;
                     }
@@ -225,26 +233,29 @@ namespace MonoArk
                     {
                         break;
                     }
+
                 case ProgramStates.GAME_PLAY:
                     {
-                        spriteBatch.Draw(gameBackground, viewPortRectangle, Color.White);
-                        spriteBatch.DrawString(fontInGame, $"FPS = {fps}.   Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
-                        racket.draw(spriteBatch);
-                        ball.draw(spriteBatch);
+                        _spriteBatch.Draw(_gameBackground, _viewPortRectangle, Color.White);
+                        _spriteBatch.DrawString(_fontInGame, $"FPS = {fps}.   Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
+                        _racket.draw(_spriteBatch);
+                        _ball.draw(_spriteBatch);
 
-                        foreach (var brick in bricks)
+                        foreach (var brick in _bricks)
                         {
                             if (brick.is_alive())
-                                brick.draw(spriteBatch);
+                                brick.draw(_spriteBatch);
+
                         }
                         break;
                     }
+
                 case ProgramStates.EXIT:
                     {
                         break;
                     }
             }
-            spriteBatch.End();
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
