@@ -10,24 +10,24 @@ namespace MonoArk
     {
         MAIN_MENU,
         GAME_MENU,
+        OPTIONS,
         GAME_PLAY,
         EXIT
     }
 
     public class GameProgram : Game
     {
-        private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
         private Rectangle viewPortRectangle;
 
-        private int widthClip = 1920;
-        private int heightClip = 1080;
+        //private int widthClip = 1920;
+        //private int heightClip = 1080;
 
         private SpriteFont fontInGame;
         private Texture2D menuBackground, gameBackground;
 
-        private Button exitButton, startButton;
+        private Button exitButton, startButton, menuOption;
 
         private Racket racket;
         private Ball ball;
@@ -48,31 +48,32 @@ namespace MonoArk
 
         public GameProgram()
         {
-            graphics = new GraphicsDeviceManager(this);
+            graphicsManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            //  programState = ProgramStates.MAIN_MENU;
-            programState = ProgramStates.GAME_PLAY;
+            programState = ProgramStates.MAIN_MENU;
         }
 
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = widthClip;
-            graphics.PreferredBackBufferHeight = heightClip;
-            graphics.IsFullScreen = true;
-            graphics.ApplyChanges();
+            //graphics.PreferredBackBufferWidth = widthClip;
+            //graphics.PreferredBackBufferHeight = heightClip;
+            //graphics.IsFullScreen = true;
+            //graphics.ApplyChanges();
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            viewPortRectangle = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+            viewPortRectangle = new Rectangle(0, 0, graphicsManager.GraphicsDevice.Viewport.Width, graphicsManager.GraphicsDevice.Viewport.Height);
             menuBackground = Content.Load<Texture2D>("menuBackground");
             gameBackground = Content.Load<Texture2D>("gameBackground");
             fontInGame = Content.Load<SpriteFont>("fontInGame");
 
             exitButton = new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress"));
             startButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("StartNoPress"));
+            menuOption = new Button(100, 400, 200, 100, Content.Load<Texture2D>("StartNoPress"));
+
             racket = new Racket(Content.Load<Texture2D>("Racket"), new Vector2(viewPortRectangle.Width / 2 - 50, viewPortRectangle.Height - 50), 10);
 
             bricks = new Brick[brickInLenght, brickInHeight];
@@ -108,6 +109,10 @@ namespace MonoArk
                         {
                             programState = ProgramStates.GAME_PLAY;
                         }
+                        if (mouse.LeftButton == ButtonState.Pressed && menuOption.ContainsButton(mouse.X, mouse.Y))
+                        {
+                            programState = ProgramStates.OPTIONS;
+                        }
                         break;
                     }
                 case ProgramStates.GAME_MENU:
@@ -115,12 +120,17 @@ namespace MonoArk
                         IsMouseVisible = true;
                         break;
                     }
+                //case ProgramStates.OPTIONS:
+                //    {
+                // Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
+                //        break;
+                //    }
                 case ProgramStates.GAME_PLAY:
                     {
                         IsMouseVisible = false;
                         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                         {
-                            // programState = ProgramStates.MAIN_MENU;
+                            programState = ProgramStates.MAIN_MENU;
                             Exit();
                         }
                         foreach (var brick in bricks)
