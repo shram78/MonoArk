@@ -41,32 +41,17 @@ namespace MonoArk
         //    }
         //}
 
-        public void SetFullScreenOreWindows(GraphicsDeviceManager graphicsManager)
+        public void SetFullScreenMode(GraphicsDeviceManager graphicsManager)
         {
-            if (graphicsManager.IsFullScreen == false)
-            {
                 graphicsManager.IsFullScreen = true;
                 graphicsManager.ApplyChanges();
-                //return true;
-            }
-            else
-            {
+        }
+
+        public void SetWindowsMode(GraphicsDeviceManager graphicsManager)
+        {
                 graphicsManager.IsFullScreen = false;
                 graphicsManager.ApplyChanges();
-                //return false;
-            }
         }
-
-        public bool SetHd()
-        {
-
-            //graphicsManager.IsFullScreen = true;
-            //graphicsManager.ApplyChanges();
-            return false;
-        }
-        //Rectangle getWindowSize
-
-
 
     }
 }

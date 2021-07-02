@@ -30,7 +30,7 @@ namespace MonoArk
         private SpriteFont fontInGame;
         private Texture2D menuBackground, gameBackground, optionsBackground;
 
-        private Button exitButton, startButton, menuOptionButton, backButton, FHDButtun;
+        private Button exitButton, startButton, menuOptionButton, backButton, FullScreenButtun, WindowsButtun;
 
         private Racket racket;
         private Ball ball;
@@ -51,8 +51,6 @@ namespace MonoArk
 
         public GameProgram()
         {
-            //GameOption gameOption = new GameOption(1920, 1080);
-            //gameOption.ChangeResolution(1920, 1080);
             graphicsManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             programState = ProgramStates.MAIN_MENU;
@@ -62,7 +60,7 @@ namespace MonoArk
         {
             graphicsManager.PreferredBackBufferWidth = widthClip;
             graphicsManager.PreferredBackBufferHeight = heightClip;
-            GameOptions.SetFullScreenOreWindows(graphicsManager);
+            GameOptions.SetFullScreenMode(graphicsManager);
             base.Initialize();
         }
 
@@ -79,8 +77,8 @@ namespace MonoArk
             startButton = new Button(100, 400, 200, 100, Content.Load<Texture2D>("StartNoPress"));
             menuOptionButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("menuOptionButton"));
             backButton = new Button(850, 800, 200, 100, Content.Load<Texture2D>("backButton"));
-            FHDButtun = new Button(850, 400, 200, 100, Content.Load<Texture2D>("FHDButtun"));
-
+            FullScreenButtun = new Button(750, 400, 200, 100, Content.Load<Texture2D>("FullScreenButtun"));
+            WindowsButtun = new Button(950, 400, 200, 100, Content.Load<Texture2D>("WindowsButtun"));
 
             racket = new Racket(Content.Load<Texture2D>("Racket"), new Vector2(viewPortRectangle.Width / 2 - 50, viewPortRectangle.Height - 50), 10);
 
@@ -138,11 +136,15 @@ namespace MonoArk
                             programState = ProgramStates.MAIN_MENU;
                         }
 
-                        if (mouse.LeftButton == ButtonState.Pressed && FHDButtun.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && FullScreenButtun.ContainsButton(mouse.X, mouse.Y))
                         {
-                            GameOptions.SetFullScreenOreWindows(graphicsManager);
+                            GameOptions.SetFullScreenMode(graphicsManager);
                         }
 
+                        if (mouse.LeftButton == ButtonState.Pressed && WindowsButtun.ContainsButton(mouse.X, mouse.Y))
+                        {
+                            GameOptions.SetWindowsMode(graphicsManager);
+                        }
                         //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
                         break;
                     }
@@ -151,8 +153,8 @@ namespace MonoArk
                         IsMouseVisible = false;
                         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                         {
-                            //programState = ProgramStates.MAIN_MENU;
-                            Exit();
+                            programState = ProgramStates.MAIN_MENU;
+                           // Exit();
                         }
                         foreach (var brick in bricks)
                         {
@@ -213,7 +215,8 @@ namespace MonoArk
                     {
                         spriteBatch.Draw(optionsBackground, viewPortRectangle, Color.White);
                         backButton.DrawButton(mouse.X, mouse.Y, spriteBatch);
-                        FHDButtun.DrawButton(mouse.X, mouse.Y, spriteBatch);
+                        FullScreenButtun.DrawButton(mouse.X, mouse.Y, spriteBatch);
+                        WindowsButtun.DrawButton(mouse.X, mouse.Y, spriteBatch);
                         //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
                         break;
                     }
