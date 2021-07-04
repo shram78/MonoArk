@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using System.Collections.Generic;
+
 using GameClasses;
 
 
@@ -18,24 +21,25 @@ namespace MonoArk
     public class GameProgram : Game
     {
         private SpriteBatch _spriteBatch;
-        private GraphicsDeviceManager _graphicsManager;
 
-        GameOption GameOptions = new GameOption(1920, 1080);
+        GameOption _optionsManager;
+
         private Rectangle _viewPortRectangle;
 
         private SpriteFont _fontInGame;
         private Texture2D _menuBackground, _gameBackground, _optionsBackground;
 
-        private Button _exitButton, _startButton, _menuOptionButton, _backButton, _fullScreenButtun, _windowsButtun;
+        //private Button _exitButton, _startButton, _menuOptionButton, _backButton, _fullScreenButtun, _windowsButtun;
 
         private Racket _racket;
         private Ball _ball;
         private Brick[,] _bricks;
 
+        private GuiManager _guiManager;
+
         private static int _brickInLenght = 10;
         private static int _brickInHeight = 5;
         private int _brickCount = _brickInLenght * _brickInHeight;
-
         MouseState mouse;
         ProgramStates programState;
 
@@ -46,15 +50,24 @@ namespace MonoArk
 
         public GameProgram()
         {
-            _graphicsManager = new GraphicsDeviceManager(this);
+            _optionsManager = new GameOption(new GraphicsDeviceManager(this), 1920, 1080);
+
+            _guiManager = new GuiManager();
+
+            _guiManager.AddButton("EXIT", new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress")));
+            _guiManager.AddButton("START", new Button(100, 400, 200, 100, Content.Load<Texture2D>("StartNoPress")));
+            _guiManager.AddButton("OPTIONS", new Button(100, 600, 200, 100, Content.Load<Texture2D>("menuOptionButton")));
+            _guiManager.AddButton("BACK", new Button(850, 800, 200, 100, Content.Load<Texture2D>("backButton")));
+            _guiManager.AddButton("FULLSCREEN", new Button(750, 400, 200, 100, Content.Load<Texture2D>("FullScreenButtun")));
+            _guiManager.AddButton("WINDOW", new Button(950, 400, 200, 100, Content.Load<Texture2D>("WindowsButtun")));
+
             Content.RootDirectory = "Content";
             programState = ProgramStates.MAIN_MENU;
         }
 
         protected override void Initialize()
         {
-            GameOptions.SetResolution(_graphicsManager);
-            GameOptions.SetFullScreenMode(_graphicsManager);
+            _optionsManager.SetFullScreenMode(true);
             base.Initialize();
         }
 
@@ -67,13 +80,6 @@ namespace MonoArk
             _gameBackground = Content.Load<Texture2D>("gameBackground");
             _optionsBackground = Content.Load<Texture2D>("optionsBackground");
             _fontInGame = Content.Load<SpriteFont>("fontInGame");
-
-            _exitButton = new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress"));
-            _startButton = new Button(100, 400, 200, 100, Content.Load<Texture2D>("StartNoPress"));
-            _menuOptionButton = new Button(100, 600, 200, 100, Content.Load<Texture2D>("menuOptionButton"));
-            _backButton = new Button(850, 800, 200, 100, Content.Load<Texture2D>("backButton"));
-            _fullScreenButtun = new Button(750, 400, 200, 100, Content.Load<Texture2D>("FullScreenButtun"));
-            _windowsButtun = new Button(950, 400, 200, 100, Content.Load<Texture2D>("WindowsButtun"));
 
             _racket = new Racket(Content.Load<Texture2D>("Racket"), new Vector2(_viewPortRectangle.Width / 2 - 50, _viewPortRectangle.Height - 50), 10);
 
@@ -104,17 +110,17 @@ namespace MonoArk
                 case ProgramStates.MAIN_MENU:
                     {
                         IsMouseVisible = true;
-                        if (mouse.LeftButton == ButtonState.Pressed && _exitButton.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("EXIT").ContainsButton(mouse.X, mouse.Y))
                         {
                             Exit();
                         }
 
-                        if (mouse.LeftButton == ButtonState.Pressed && _startButton.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("START").ContainsButton(mouse.X, mouse.Y))
                         {
                             programState = ProgramStates.GAME_PLAY;
                         }
 
-                        if (mouse.LeftButton == ButtonState.Pressed && _menuOptionButton.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("OPTIONS").ContainsButton(mouse.X, mouse.Y))
                         {
                             programState = ProgramStates.OPTIONS;
                         }
@@ -131,19 +137,21 @@ namespace MonoArk
                     {
                         IsMouseVisible = true;
 
-                        if (mouse.LeftButton == ButtonState.Pressed && _backButton.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("BACK").ContainsButton(mouse.X, mouse.Y))
                         {
                             programState = ProgramStates.MAIN_MENU;
                         }
 
-                        if (mouse.LeftButton == ButtonState.Pressed && _fullScreenButtun.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("FULLSCREEN").ContainsButton(mouse.X, mouse.Y))
                         {
-                            GameOptions.SetFullScreenMode(_graphicsManager);
+                            _optionsManager.SetFullScreenMode(true);
+                            _optionsManager.SetResolution(1920, 1080);
                         }
 
-                        if (mouse.LeftButton == ButtonState.Pressed && _windowsButtun.ContainsButton(mouse.X, mouse.Y))
+                        if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("WINDOW").ContainsButton(mouse.X, mouse.Y))
                         {
-                            GameOptions.SetWindowsMode(_graphicsManager);
+                            _optionsManager.SetFullScreenMode(false);
+                            _optionsManager.SetResolution(1280, 720);
                         }
                         //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
                         break;
@@ -206,25 +214,24 @@ namespace MonoArk
 
             _spriteBatch.Begin();
 
-
             switch (programState)
             {
 
                 case ProgramStates.MAIN_MENU:
                     {
                         _spriteBatch.Draw(_menuBackground, _viewPortRectangle, Color.White);
-                        _exitButton.DrawButton(mouse.X, mouse.Y, _spriteBatch);
-                        _startButton.DrawButton(mouse.X, mouse.Y, _spriteBatch);
-                        _menuOptionButton.DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _guiManager.GetButton("EXIT").DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _guiManager.GetButton("START").DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _guiManager.GetButton("OPTIONS").DrawButton(mouse.X, mouse.Y, _spriteBatch);
                         break;
                     }
 
                 case ProgramStates.OPTIONS:
                     {
                         _spriteBatch.Draw(_optionsBackground, _viewPortRectangle, Color.White);
-                        _backButton.DrawButton(mouse.X, mouse.Y, _spriteBatch);
-                        _fullScreenButtun.DrawButton(mouse.X, mouse.Y, _spriteBatch);
-                        _windowsButtun.DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _guiManager.GetButton("BACK").DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _guiManager.GetButton("FULLSCREEN").DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _guiManager.GetButton("WINDOW").DrawButton(mouse.X, mouse.Y, _spriteBatch);
                         //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
                         break;
                     }

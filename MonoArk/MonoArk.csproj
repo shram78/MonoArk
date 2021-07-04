@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Button.cs" />
+    <Compile Include="GuiManager.cs" />
     <Compile Include="GameClasses.cs" />
     <Compile Include="GameOption.cs" />
     <Compile Include="GameProgram.cs" />

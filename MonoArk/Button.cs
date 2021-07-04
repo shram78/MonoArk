@@ -32,5 +32,13 @@ namespace MonoArk
         {
             return _rectangle.Contains(mouseX, mouseY);
         }
+
+        public void Resize(double scaleX, double scaleY) {
+            _rectangle.X = (int) (_rectangle.X * scaleX);
+            _rectangle.Width = (int) (_rectangle.Width * scaleX);
+
+            _rectangle.Y = (int) (_rectangle.Y * scaleY);
+            _rectangle.Height = (int) (_rectangle.Height * scaleY);
+        }
     }
 }

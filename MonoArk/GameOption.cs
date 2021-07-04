@@ -6,48 +6,62 @@ namespace MonoArk
 {
     class GameOption
     {
+
+        private GraphicsDeviceManager _graphicsManager;
         private int _widthClip;
         private int _heightClip;
-        public GameOption(int widthClip, int heightClip)
+
+        public GameOption(GraphicsDeviceManager graphicsManager, int widthClip, int heightClip)
+        {
+            _graphicsManager = graphicsManager;
+            _widthClip = widthClip;
+            _heightClip = heightClip;
+            _graphicsManager.PreferredBackBufferWidth = _widthClip;
+            _graphicsManager.PreferredBackBufferHeight = _heightClip;
+            _graphicsManager.ApplyChanges();
+        }
+
+        public void SetResolution(int widthClip, int heightClip)
         {
             _widthClip = widthClip;
             _heightClip = heightClip;
+            _graphicsManager.PreferredBackBufferWidth = _widthClip;
+            _graphicsManager.PreferredBackBufferHeight = _heightClip;
+            _graphicsManager.ApplyChanges();
         }
 
-        public void SetResolution(GraphicsDeviceManager graphicsManager)
+        //public void ChangeResolution(GraphicsDeviceManager graphicsManager)
+        //{
+        //    _widthClip = 1024;
+        //    _heightClip = 768;
+
+        //    graphicsManager.PreferredBackBufferWidth = _widthClip;
+        //    graphicsManager.PreferredBackBufferHeight = _heightClip;
+
+        //    //Сохранил новые настройки
+        //    //widthClip = Width;
+        //    //heightClip = Height;
+        //    //Отправил запрос на изменение разрешения движку
+        //    //    graphics.PreferredBackBufferWidth = widthClip;
+        //    //  graphics.PreferredBackBufferHeight = heightClip;
+        //    //Применил изменение разрешения
+        //    // graphics.ApplyChanges();
+        //}
+
+        public void SetFullScreenMode(bool isFullscreen)
         {
-            graphicsManager.PreferredBackBufferWidth = _widthClip;
-            graphicsManager.PreferredBackBufferHeight = _heightClip;
+            _graphicsManager.IsFullScreen = isFullscreen;
+            _graphicsManager.ApplyChanges();
         }
 
-        public void ChangeResolution(GraphicsDeviceManager graphicsManager)
+        public double GetXscale()
         {
-            _widthClip = 1024;
-            _heightClip = 768;
-
-            graphicsManager.PreferredBackBufferWidth = _widthClip;
-            graphicsManager.PreferredBackBufferHeight = _heightClip;
-
-            //Сохранил новые настройки
-            //widthClip = Width;
-            //heightClip = Height;
-            //Отправил запрос на изменение разрешения движку
-            //    graphics.PreferredBackBufferWidth = widthClip;
-            //  graphics.PreferredBackBufferHeight = heightClip;
-            //Применил изменение разрешения
-            // graphics.ApplyChanges();
+            return _widthClip / 1920.0;
         }
 
-        public void SetFullScreenMode(GraphicsDeviceManager graphicsManager)
+        public double GetYscale()
         {
-            graphicsManager.IsFullScreen = true;
-            graphicsManager.ApplyChanges();
-        }
-
-        public void SetWindowsMode(GraphicsDeviceManager graphicsManager)
-        {
-            graphicsManager.IsFullScreen = false;
-            graphicsManager.ApplyChanges();
+            return _heightClip / 1080.0;
         }
 
     }
