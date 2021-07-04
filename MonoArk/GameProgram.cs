@@ -52,6 +52,8 @@ namespace MonoArk
         {
             _optionsManager = new GameOption(new GraphicsDeviceManager(this), 1920, 1080);
 
+            Content.RootDirectory = "Content";
+
             _guiManager = new GuiManager();
 
             _guiManager.AddButton("EXIT", new Button(100, 800, 200, 100, Content.Load<Texture2D>("ExitNoPress")));
@@ -61,7 +63,6 @@ namespace MonoArk
             _guiManager.AddButton("FULLSCREEN", new Button(750, 400, 200, 100, Content.Load<Texture2D>("FullScreenButtun")));
             _guiManager.AddButton("WINDOW", new Button(950, 400, 200, 100, Content.Load<Texture2D>("WindowsButtun")));
 
-            Content.RootDirectory = "Content";
             programState = ProgramStates.MAIN_MENU;
         }
 
