@@ -27,6 +27,12 @@ namespace MonoArk
 			return _buttons[buttonName];
 		}
 
+		public void ResizeButtons(double scaleX, double scaleY) {
+
+			foreach (Button button in _buttons.Values)
+				button.Resize(scaleX, scaleY);
+		}
+
         public bool CheckCollision(string buttonName, int mouseX, int mouseY)
 		{
 			return _buttons[buttonName].ContainsButton(mouseX, mouseY);

@@ -146,13 +146,21 @@ namespace MonoArk
                         if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("FULLSCREEN").ContainsButton(mouse.X, mouse.Y))
                         {
                             _optionsManager.SetFullScreenMode(true);
+                            //Такое преобразование нужно, чтобы вернуть к дефолту размеры кнопок перед очередным изменением разрешения
+                            _guiManager.ResizeButtons(1 / _optionsManager.GetXscale(), 1 / _optionsManager.GetYscale());
+                            //
                             _optionsManager.SetResolution(1920, 1080);
+                            _guiManager.ResizeButtons(_optionsManager.GetXscale(), _optionsManager.GetYscale());
                         }
 
                         if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("WINDOW").ContainsButton(mouse.X, mouse.Y))
                         {
                             _optionsManager.SetFullScreenMode(false);
+                            //Такое преобразование нужно, чтобы вернуть к дефолту размеры кнопок перед очередным изменением разрешения
+                            _guiManager.ResizeButtons(1 / _optionsManager.GetXscale(), 1 / _optionsManager.GetYscale());
+                            //
                             _optionsManager.SetResolution(1280, 720);
+                            _guiManager.ResizeButtons(_optionsManager.GetXscale(), _optionsManager.GetYscale());
                         }
                         //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
                         break;
