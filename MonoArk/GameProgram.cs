@@ -22,7 +22,7 @@ namespace MonoArk
         private SpriteBatch _spriteBatch;
 
         GameOption _optionsManager;
-        private bool _isFpsOn;
+        private bool _isFpsOn = true;
 
         private Rectangle _viewPortRectangle;
 
@@ -167,13 +167,15 @@ namespace MonoArk
                         if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("FPSON").ContainsButton(mouse.X, mouse.Y))
                         {
                             _isFpsOn = true;
-                           // _guiManager.ResizeButtons(1 / _optionsManager.GetXscale(), 1 / _optionsManager.GetYscale());
+                            _guiManager.ResizeButtons(1 / _optionsManager.GetXscale(), 1 / _optionsManager.GetYscale());
+                            _guiManager.ResizeButtons(_optionsManager.GetXscale(), _optionsManager.GetYscale());
                         }
 
                         if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("FPSOFF").ContainsButton(mouse.X, mouse.Y))
                         {
                             _isFpsOn = false;
-                            //_guiManager.ResizeButtons(1 / _optionsManager.GetXscale(), 1 / _optionsManager.GetYscale());
+                            _guiManager.ResizeButtons(1 / _optionsManager.GetXscale(), 1 / _optionsManager.GetYscale());
+                            _guiManager.ResizeButtons(_optionsManager.GetXscale(), _optionsManager.GetYscale());
                         }
                         //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
                         break;
