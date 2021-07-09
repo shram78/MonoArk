@@ -22,6 +22,7 @@ namespace MonoArk
         private SpriteBatch _spriteBatch;
 
         GameOption _optionsManager;
+        private bool _isFpsOn;
 
         private Rectangle _viewPortRectangle;
 
@@ -162,6 +163,18 @@ namespace MonoArk
                             _optionsManager.SetResolution(1280, 720);
                             _guiManager.ResizeButtons(_optionsManager.GetXscale(), _optionsManager.GetYscale());
                         }
+
+                        if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("FPSON").ContainsButton(mouse.X, mouse.Y))
+                        {
+                            _isFpsOn = true;
+                           // _guiManager.ResizeButtons(1 / _optionsManager.GetXscale(), 1 / _optionsManager.GetYscale());
+                        }
+
+                        if (mouse.LeftButton == ButtonState.Pressed && _guiManager.GetButton("FPSOFF").ContainsButton(mouse.X, mouse.Y))
+                        {
+                            _isFpsOn = false;
+                            //_guiManager.ResizeButtons(1 / _optionsManager.GetXscale(), 1 / _optionsManager.GetYscale());
+                        }
                         //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
                         break;
                     }
@@ -272,7 +285,7 @@ namespace MonoArk
                     }
             }
 
-            if (true)
+            if (_isFpsOn)
             {
                 _spriteBatch.DrawString(_fontInGame, $"FPS = {fps}.   Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
 
