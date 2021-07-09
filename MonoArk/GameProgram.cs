@@ -28,7 +28,6 @@ namespace MonoArk
         private SpriteFont _fontInGame;
         private Texture2D _menuBackground, _gameBackground, _optionsBackground;
 
-
         private Racket _racket;
         private Ball _ball;
         private Brick[,] _bricks;
