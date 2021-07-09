@@ -63,6 +63,5 @@ namespace MonoArk
         {
             return _heightClip / 1080.0;
         }
-
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
 using System.Collections.Generic;
 
 using GameClasses;
@@ -29,7 +28,6 @@ namespace MonoArk
         private SpriteFont _fontInGame;
         private Texture2D _menuBackground, _gameBackground, _optionsBackground;
 
-        //private Button _exitButton, _startButton, _menuOptionButton, _backButton, _fullScreenButtun, _windowsButtun;
 
         private Racket _racket;
         private Ball _ball;
@@ -62,6 +60,9 @@ namespace MonoArk
             _guiManager.AddButton("BACK", new Button(850, 800, 200, 100, Content.Load<Texture2D>("backButton")));
             _guiManager.AddButton("FULLSCREEN", new Button(750, 400, 200, 100, Content.Load<Texture2D>("FullScreenButtun")));
             _guiManager.AddButton("WINDOW", new Button(950, 400, 200, 100, Content.Load<Texture2D>("WindowsButtun")));
+            _guiManager.AddButton("FPSON", new Button(750, 500, 200, 100, Content.Load<Texture2D>("fpsOnButton")));
+            _guiManager.AddButton("FPSOFF", new Button(950, 500, 200, 100, Content.Load<Texture2D>("fpsOffButton")));
+
 
             programState = ProgramStates.MAIN_MENU;
         }
@@ -222,7 +223,6 @@ namespace MonoArk
             }
 
             _spriteBatch.Begin();
-
             switch (programState)
             {
 
@@ -241,6 +241,8 @@ namespace MonoArk
                         _guiManager.GetButton("BACK").DrawButton(mouse.X, mouse.Y, _spriteBatch);
                         _guiManager.GetButton("FULLSCREEN").DrawButton(mouse.X, mouse.Y, _spriteBatch);
                         _guiManager.GetButton("WINDOW").DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _guiManager.GetButton("FPSON").DrawButton(mouse.X, mouse.Y, _spriteBatch);
+                        _guiManager.GetButton("FPSOFF").DrawButton(mouse.X, mouse.Y, _spriteBatch);
                         //Проверка кнопок настроек игры и вызов методов из класса GameOption для применения новых настроек игры
                         break;
                     }
@@ -253,7 +255,6 @@ namespace MonoArk
                 case ProgramStates.GAME_PLAY:
                     {
                         _spriteBatch.Draw(_gameBackground, _viewPortRectangle, Color.White);
-                        _spriteBatch.DrawString(_fontInGame, $"FPS = {fps}.   Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
                         _racket.draw(_spriteBatch);
                         _ball.draw(_spriteBatch);
 
@@ -271,6 +272,13 @@ namespace MonoArk
                         break;
                     }
             }
+
+            if (true)
+            {
+                _spriteBatch.DrawString(_fontInGame, $"FPS = {fps}.   Game is playing. Mouse is disabled. To return- Esc", new Vector2(0, 0), Color.Red);
+
+            }
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }

@@ -70,6 +70,7 @@ namespace GameClasses
             Position.X += speed.X;
             Position.Y += -speed.Y;
         }
+
         public void changeDirection_X()
         {
             speed.X = -speed.X;
